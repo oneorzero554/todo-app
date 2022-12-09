@@ -2,7 +2,6 @@ package repositories
 
 import (
     "github.com/jmoiron/sqlx"
-    entity "todo-app/internal/entities"
 )
 
 type Task struct {
@@ -11,8 +10,4 @@ type Task struct {
 
 func NewTaskRepository(db *sqlx.DB) *Task  {
     return &Task{db: db}
-}
-
-func (t *Task) Create(task entity.Task)  {
-
 }

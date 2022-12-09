@@ -1,4 +1,4 @@
-package dbclients
+package db
 
 import (
     "fmt"
@@ -16,12 +16,12 @@ type Config struct {
 }
 
 func NewPostgresClient(cfg Config) (*sqlx.DB, error) {
-    db, err := sqlx.Connect("postgres", fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=%s",
+    client, err := sqlx.Connect("postgres", fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=%s",
         cfg.Host, cfg.Port, cfg.Username, cfg.DBName, cfg.Password, cfg.SSLMode))
 
     if err != nil {
         log.Fatalln(err)
     }
 
-    return db, nil
+    return client, nil
 }

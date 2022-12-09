@@ -2,7 +2,6 @@ package repositories
 
 import (
     "github.com/jmoiron/sqlx"
-    entity "todo-app/internal/entities"
 )
 
 type List struct {
@@ -11,8 +10,4 @@ type List struct {
 
 func NewListRepository(db *sqlx.DB) *List  {
     return &List{db: db}
-}
-
-func (l *List) Create(list entity.List)  {
-    
 }
