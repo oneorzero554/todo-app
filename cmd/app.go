@@ -2,7 +2,9 @@ package main
 
 import (
     "github.com/gin-gonic/gin"
+    "github.com/joho/godotenv"
     "log"
+    "os"
     "todo-app/internal/handlers"
     "todo-app/internal/repositories"
     "todo-app/internal/services"
@@ -11,7 +13,19 @@ import (
 
 func main() {
 
-    dbc, err := db.NewPostgresClient(db.Config{})
+    err := godotenv.Load()
+    if err != nil {
+        log.Fatal("error loading .env file")
+    }
+
+    dbc, err := db.NewPostgresClient(db.Config{
+        Host: os.Getenv("DB_HOST"),
+        Port: os.Getenv("DB_PORT"),
+        Username: os.Getenv("DB_USERNAME"),
+        Password: os.Getenv("DB_PASSWORD"),
+        DBName: os.Getenv("DB_NAME"),
+        SSLMode: os.Getenv("DB_SSLMODE"),
+    })
 
     if err != nil {
         log.Fatal(err)
