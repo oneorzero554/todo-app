@@ -1,6 +1,7 @@
 package entity
 
 type List struct {
-    Name string
-    Description string
+    ID int `json:"id"`
+    Name string `json:"name"`
+    Description *string `json:"description"`
 }
