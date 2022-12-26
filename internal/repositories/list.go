@@ -17,7 +17,7 @@ func NewListRepository(db *sqlx.DB) *List  {
 }
 
 func (l *List) GetAll() ([]entity.List, error){
-    var lists []entity.List
+    var lists = make([]entity.List, 0)
 
     query := fmt.Sprintf("SELECT id, name, description FROM %s", ListTable)
     err := l.db.Select(&lists, query)
@@ -35,21 +35,17 @@ func (l *List) GetById(id int) (entity.List, error){
 }
 
 func (l *List) Update(list *entity.List) (*entity.List, error) {
-    var res entity.List
-
-    query := fmt.Sprintf("UPDATE %s SET name = $1, description = $2) WHERE id = $3 RETURNING *", ListTable)
+    query := fmt.Sprintf("UPDATE %s SET name = $1, description = $2 WHERE id = $3 RETURNING *", ListTable)
     err := l.db.Get(list, query, list.Name, list.Description, list.ID)
 
-    return &res, err
+    return list, err
 }
 
 func (l *List) Create(list *entity.List) (*entity.List, error) {
-    var res entity.List
-
     query := fmt.Sprintf("INSERT INTO %s (name, description) VALUES ($1, $2) RETURNING *", ListTable)
     err := l.db.Get(list, query, list.Name, list.Description)
 
-    return &res, err
+    return list, err
 }
 
 func (l *List) Delete(id int) error {
