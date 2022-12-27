@@ -15,7 +15,7 @@ func (h *Handler) IndexList(c *gin.Context) {
         return
     }
 
-    c.JSON(http.StatusOK, lists)
+    c.JSON(http.StatusCreated, lists)
 }
 
 func (h *Handler) ShowList(c *gin.Context) {
