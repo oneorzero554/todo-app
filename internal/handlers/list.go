@@ -1,6 +1,7 @@
 package handlers
 
 import (
+    "database/sql"
     "github.com/gin-gonic/gin"
     "net/http"
     "strconv"
@@ -15,7 +16,7 @@ func (h *Handler) IndexList(c *gin.Context) {
         return
     }
 
-    c.JSON(http.StatusCreated, lists)
+    c.JSON(http.StatusOK, lists)
 }
 
 func (h *Handler) ShowList(c *gin.Context) {
@@ -27,7 +28,13 @@ func (h *Handler) ShowList(c *gin.Context) {
 
     list, err := h.services.List.GetById(id)
     if err != nil {
-        c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+
+        if err == sql.ErrNoRows {
+            c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "not found"})
+        } else {
+            c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+        }
+
         return
     }
 
@@ -48,7 +55,7 @@ func (h *Handler) CreateList(c *gin.Context) {
         return
     }
 
-    c.JSON(http.StatusOK, list)
+    c.JSON(http.StatusCreated, list)
 }
 
 func (h *Handler) UpdateList(c *gin.Context) {
@@ -81,5 +88,5 @@ func (h *Handler) DeleteList(c *gin.Context) {
         return
     }
 
-    c.AbortWithStatus(204)
+    c.AbortWithStatus(http.StatusNoContent)
 }
